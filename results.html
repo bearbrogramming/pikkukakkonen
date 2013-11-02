@@ -23,18 +23,10 @@
     </div>
     <div id="selection">
         <div class="col-xs-9">
-            <h2>Please choose your dates</h2>
+            <h2>Results</h2>
             <div id="event_times"></div>
             <button id="confirm_button">Confirm times</button>
         </div>
-        <div class="col-xs-3">
-            <h2 id="autofill_text">Autofill</h2>
-            <div id="autofill"></div>
-        </div>
-    </div>
-    <div id="thanks">
-        <h1>Thank you for your input</h1>
-        <p><a href="results.html">Check out the results</a></p>
     </div>
 </div>
 <script>
@@ -92,35 +84,35 @@
         '2013-11-03': [],
         '2013-12-01': ['13:00','15:55']
     }
-   for (var dtm in dates) {
-       var box = $("<div/>", { id: key,class: 'classofdays' });
-       var dow = getDow(dtm);
-       var boxname = $("<div>" + dow + " " + dtm +"</div>");
-       box.append(boxname);
-       if (dates[dtm].length == 0) {
-           dates[dtm].push(' ');
-       }
-       for (var time in dates[dtm]) {
-           var dayname = dates[dtm][time];
-           var dbox = $("<div />", { class: 'day'});
+    for (var dtm in dates) {
+        var box = $("<div/>", { id: key,class: 'classofdays' });
+        var dow = getDow(dtm);
+        var boxname = $("<div>" + dow + " " + dtm +"</div>");
+        box.append(boxname);
+        if (dates[dtm].length == 0) {
+            dates[dtm].push(' ');
+        }
+        for (var time in dates[dtm]) {
+            var dayname = dates[dtm][time];
+            var dbox = $("<div />", { class: 'day'});
 
-           var dname = $("<div class='dayname'> " + dayname +"</div>");
-           var opts = $("<div />", { class: 'options ' });
-           for (var choice in choices) {
-               var opt = $("<div />", { class: 'option' });
+            var dname = $("<div class='dayname'> " + dayname +"</div>");
+            var opts = $("<div />", { class: 'options ' });
+            for (var choice in choices) {
+                var opt = $("<div />", { class: 'option' });
 //                opt.text(choices[choice]);
-               opt.addClass(dow);
-               opt.addClass(choices[choice]);
-               opts.append(opt);
-           }
+                opt.addClass(dow);
+                opt.addClass(choices[choice]);
+                opts.append(opt);
+            }
 
-           dbox.append(dname);
-           dbox.append(opts);
-           box.append(dbox);
-       }
+            dbox.append(dname);
+            dbox.append(opts);
+            box.append(dbox);
+        }
 
-       $("#event_times").append(box);
-   }
+        $("#event_times").append(box);
+    }
 
     function getDow(dtm) {
         return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"][new Date(Date.parse(dtm)).getDay()];
@@ -138,13 +130,13 @@
         $("#event_times .option." + choice + "." + day).addClass("selected");
     });
 
-   $("#event_times .option").click(function() {
-       var that = $(this);
-       var choice = that.attr("data-choice");
-       var day = that.attr("data-day");
-       that.parent().find("div").removeClass("selected");
-       that.addClass("selected");
-   });
+    $("#event_times .option").click(function() {
+        var that = $(this);
+        var choice = that.attr("data-choice");
+        var day = that.attr("data-day");
+        that.parent().find("div").removeClass("selected");
+        that.addClass("selected");
+    });
     $("#confirm_button").click(function() {
         $("#selection").hide();
         $("#thanks").show();

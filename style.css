@@ -69,3 +69,8 @@ body {
 .yesmaybe { background: url('/yesmaybe.jpg') no-repeat;}
 .nomaybe {background: url('/nomaybe.jpg') no-repeat;}
 .no { background: url('/no.jpg') no-repeat;}
+
+button {
+    clear: both;
+    margin-top: 100px;
+}
