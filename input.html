@@ -128,6 +128,15 @@
         $("#event_times .option." + choice + "." + day).addClass("selected");
     });
 
+   $("#event_times .option").click(function() {
+       console.log("fubar")
+       var that = $(this);
+       var choice = that.attr("data-choice");
+       var day = that.attr("data-day");
+       that.parent().find("div").removeClass("selected");
+       that.addClass("selected");
+   });
+
 </script>
 </body>
 </html>
