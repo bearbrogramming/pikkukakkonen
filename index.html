@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Brooblem? >> Admin</title>
+    <title>Bro-Time™</title>
     <script src="/lib/jquery/jquery-1.9.1.js"></script>
     <script src="/lib/jquery/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="/lib/bootstrap/bootstrap.min.js"></script>
@@ -18,15 +18,17 @@
 <body>
 
 <div class="container">
-    <h1>Create new event</h1>
+    <div id="logo">
+        Bro-Time<sup>TM</sup>
+    </div>
+    <div id="steps">
+        <div id="choose_times">1. Choose times</div>
+        <div id="send_invites">2. Send invites</div>
+        <div id="questions">3. ???</div>
+        <div id="profit">4. Profit!</div>
+    </div>
 
-
-        <h2>Basic info</h2>
-        Title : <input type="text" name="title"/><br/>
-        Description:<br/>
-        <textarea name="description"></textarea><br>
-
-        <h2>Select dates (and times)</h2>
+    <div id="choose_times_page" class="page">
 
         <div id="newdatetime">
             <input name="date" id="date" size="12"/>
@@ -39,7 +41,7 @@
         <div id="pickers">
             <div id="datepicker" class="col-xs-6">
             </div>
-            <div id="hourpicker"  class="col-xs-3"></div>
+            <div id="hourpicker" class="col-xs-3"></div>
             <div id="minutepicker" class="col-xs-3"></div>
         </div>
 
@@ -48,29 +50,55 @@
         </button>
 
 
-    <div id="chosenones">
-        <ul id="list"></ul>
+        <div id="chosenones">
+            <ul id="list"></ul>
+        </div>
+    </div>
+    <div id="send_invites_page" class="page">
+        <h2>Basic info</h2>
+        Title : <input type="text" name="title"/><br/>
+        Description:<br/>
+        <textarea name="description"></textarea><br/>
+        Recipients (1 per line):<br/>
+        <textarea name="emails"></textarea><br/>
+        <button id="send_emails">
+            Send invites
+        </button>
+
+    </div>
+
+    <div id="questions_page" class="page">
+        <p>Your invites have been sent. Click below to view the results page</p>
+        <p><button id="go_to_results">See results</button></p>
+
+
+    </div>
+
+    <div id="profit_page" class="page">
+        <h2>Congratulations</h2>
+        <p>Your polling was successful. Here are the results:</p>
     </div>
 </div>
 <script>
     for (var i = 0; i < 24; i++) {
-        var hour = $("<div id='h"+i+"'></div>");
+        var hour = $("<div id='h" + i + "'></div>");
         hour.text(i);
-        hour.click(function(e) {
+        hour.click(function (e) {
             $("#hour").val($(this).text());
             if ($("#minute").val() === "") {
                 $("#minute").val("00");
-            };
+            }
+            ;
             $("#minutepicker div").removeClass("disabled");
             $("#hourpicker div").removeClass("selected");
             $(this).addClass("selected");
         });
         $("#hourpicker").append(hour);
     }
-    for (var i = 0; i < 60; i+=5) {
-        var minute = $("<div id='m"+i+"'></div>");
+    for (var i = 0; i < 60; i += 5) {
+        var minute = $("<div id='m" + i + "'></div>");
         minute.text(i);
-        minute.click(function(e) {
+        minute.click(function (e) {
             if (!$(this).hasClass("disabled")) {
                 $("#minute").val($(this).text());
             }
@@ -79,7 +107,7 @@
         });
         $("#minutepicker").append(minute);
     }
-    $( "#datepicker" ).datepicker({
+    $("#datepicker").datepicker({
         numberOfMonths: [1, 2],
         altField: "#date",
         altFormat: "yy-mm-dd",
@@ -91,7 +119,7 @@
 
     var chosen = [];
 
-    $("#add").click(function(e){
+    $("#add").click(function (e) {
         var dtm = $("#date").val();
         var hr = $("#hour").val();
         var min = $("#minute").val();
@@ -107,6 +135,28 @@
             console.log(event_text, $.inArray(event_text, chosen));
         }
     });
+
+    function chooseStep(n) {
+        n--;
+        $("#steps div").removeClass("selected");
+        $("#steps div:eq(" + n + ")").addClass("selected");
+
+        $(".page").hide();
+        $(".page:eq("+n+")").show();
+    }
+
+    $("#done").click(function() {
+       chooseStep(2);
+    });
+
+    $("#send_emails").click(function() {
+        chooseStep(3);
+    });
+    $("#go_to_results").click(function() {
+        chooseStep(4);
+    });
+
+    chooseStep(1);
 </script>
 </body>
 </html>
