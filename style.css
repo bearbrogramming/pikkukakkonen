@@ -52,8 +52,10 @@ body {
     min-height: 1000px;
 }
 
+.input2 .options { margin-top: -1.5em;}
 .day { clear: both;  width: 300px; padding-left: 2em;}
 .classofdays { clear: both; border-top: 1px dotted #ccc;}
+.input2 .classofdays { clear: both; border-top: 1px dotted #ccc;}
 .day .dayname { float: left; }
 
 div.option {
@@ -67,7 +69,9 @@ div.option {
     -webkit-filter: grayscale(0%);
 }
 
-table td, table th { padding: 16px;}
+table td, table th {
+    padding: 4px 12px;
+}
 thead th.option {
     width: 36px; height: 36px;
 }
@@ -85,3 +89,6 @@ button {
 #confirm_button { margin-top: 100px;}
 
 #chosenones { clear: both;}
+
+tr .choose-me { visibility: hidden; }
+tr:hover .choose-me { visibility: visible; cursor: pointer }
