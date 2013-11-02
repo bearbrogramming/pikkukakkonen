@@ -7,6 +7,7 @@
     <script src="/lib/jquery/jquery-1.9.1.js"></script>
     <script src="/lib/jquery/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="/lib/bootstrap/bootstrap.min.js"></script>
+    <script src="/lib/jquery.tablesorter.min.js"></script>
 
     <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/lib/bootstrap/bootstrap-theme.min.css">
@@ -24,123 +25,64 @@
     <div id="selection">
         <div class="col-xs-9">
             <h2>Results</h2>
-            <div id="event_times"></div>
-            <button id="confirm_button">Confirm times</button>
+            <table id="results">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th class="option yes"></th>
+                        <th class="option yesmaybe"></th>
+                        <th class="option nomaybe"></th>
+                        <th class="option no"></th>
+                    </tr>
+                </thead>
+                <tbody id="dabody"></tbody>
+            </table>
         </div>
     </div>
 </div>
 <script>
 
-    $("#thanks").hide();
-    $("#autofill_text").click(function() {
-        $("#autofill").toggle();
-    });
-
-    $(".options").each(function() {
-        var yes = $("<div class='yes option'>yes</div>");
-        var maybeyes = $("<div class='maybeyes option'>maybeyes</div>");
-        var maybeno = $("<div class='maybeno option'>maybeno</div>");
-        var no = $("<div class='no option'>no</div>");
-
-    });
-    var autofills = {
-        weekdays: ['monday','tuesday','wednesday','thursday','friday'],
-        weekends: ['saturday','sunday']
-    }
-    var choices = ['yes', 'yesmaybe','nomaybe','no'].reverse();
-
-
-    for (var key in autofills) {
-        var box = $("<div/>", { id: key,class: 'classofdays' });
-        var boxname = $("<div>" + key +"</div>");
-        box.append(boxname);
-        for (var day in autofills[key]) {
-            var dayname = autofills[key][day];
-            var dbox = $("<div />", { class: 'day'});
-            var dname = $("<div class='dayname'>" + dayname +"</div>");
-            var opts = $("<div />", { class: 'options '+dayname });
-            for (var choice in choices) {
-                var opt = $("<div />", { class: 'option' });
-//                opt.text(choices[choice]);
-                opt.attr('data-day', dayname);
-                opt.attr('data-choice', choices[choice]);
-                opt.addClass(choices[choice]);
-                opts.append(opt);
-            }
-
-            dbox.append(dname);
-            dbox.append(opts);
-            box.append(dbox);
-        }
-
-        $("#autofill").append(box);
-    }
 
     var dates = {
-        '2013-11-02': [],
-        '2013-12-24': ['13:00','15:55'],
-        '2013-11-08': [],
-        '2013-12-26': ['13:00','15:55'],
-        '2013-11-03': [],
-        '2013-12-01': ['13:00','15:55']
+        '2013-12-06': [100,0,0,0],
+        '2013-11-02': [75,5,0,20],
+        '2013-12-24 13:00': [30, 40, 10, 10],
+        '2013-12-24 15:00': [10, 10, 0, 80],
+        '2013-11-01': [40,50,8,2],
+        '2013-12-25 13:00': [7, 42, 30, 10],
+        '2013-12-25 15:00': [0, 0, 90, 20],
+        '2013-12-25 9:00': [50, 0, 0, 50]
     }
     for (var dtm in dates) {
-        var box = $("<div/>", { id: key,class: 'classofdays' });
-        var dow = getDow(dtm);
-        var boxname = $("<div>" + dow + " " + dtm +"</div>");
-        box.append(boxname);
-        if (dates[dtm].length == 0) {
-            dates[dtm].push(' ');
+        var row = $("<tr/>");
+        var th = $("<th></th>");
+        var date = dtm;
+        var dow = getDow(date);
+        th.text(dow + " " + date);
+        var total = 0;
+        for (var result in dates[dtm]) {
+            total += dates[dtm][result];
         }
-        for (var time in dates[dtm]) {
-            var dayname = dates[dtm][time];
-            var dbox = $("<div />", { class: 'day'});
-
-            var dname = $("<div class='dayname'> " + dayname +"</div>");
-            var opts = $("<div />", { class: 'options ' });
-            for (var choice in choices) {
-                var opt = $("<div />", { class: 'option' });
-//                opt.text(choices[choice]);
-                opt.addClass(dow);
-                opt.addClass(choices[choice]);
-                opts.append(opt);
-            }
-
-            dbox.append(dname);
-            dbox.append(opts);
-            box.append(dbox);
+        row.append(th);
+        for (var result in dates[dtm]) {
+            var td = $("<td></td>")
+            var value = dates[dtm][result];
+            var percentage = value / total;
+            var size = 16 + Math.floor(percentage * 10);
+            var color = 255 - Math.min(255, Math.floor(75 + 150 * percentage));
+            td.css({'font-size' : size, 'color': 'rgb('+color+','+color+','+color+')' });
+            td.text(value);
+            row.append(td);
         }
-
-        $("#event_times").append(box);
+        $("#dabody").append(row);
     }
+
+    $("#results").tablesorter({sortList: [[1,1], [2,1], [3,1]]});
 
     function getDow(dtm) {
         return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"][new Date(Date.parse(dtm)).getDay()];
     }
 
-    $(".no").addClass("selected");
-
-    $("#autofill .option").click(function() {
-        var that = $(this);
-        var choice = that.attr("data-choice");
-        var day = that.attr("data-day");
-        that.parent().find("div").removeClass("selected");
-        that.addClass("selected");
-        $("#event_times .option." + day).removeClass("selected");
-        $("#event_times .option." + choice + "." + day).addClass("selected");
-    });
-
-    $("#event_times .option").click(function() {
-        var that = $(this);
-        var choice = that.attr("data-choice");
-        var day = that.attr("data-day");
-        that.parent().find("div").removeClass("selected");
-        that.addClass("selected");
-    });
-    $("#confirm_button").click(function() {
-        $("#selection").hide();
-        $("#thanks").show();
-    });
 
 </script>
 </body>

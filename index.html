@@ -28,39 +28,48 @@
         <div id="profit">4. Profit!</div>
     </div>
 
+    <br style="clear:both;"/>
     <div id="choose_times_page" class="page">
 
-        <div id="newdatetime">
-            <input name="date" id="date" size="12"/>
-            ( <input name="hour" id="hour" size="2"/>:<input name="minute" id="minute" size="2"/> )
-            <button id="add">
-                Add
-            </button>
-        </div>
-
-        <div id="pickers">
+        <div id="pickers" class="col-xs-12">
             <div id="datepicker" class="col-xs-6">
             </div>
             <div id="hourpicker" class="col-xs-3"></div>
             <div id="minutepicker" class="col-xs-3"></div>
+            <div id="newdatetime" >
+                <input name="date" id="date" size="12"/>
+                ( <input name="hour" id="hour" size="2"/>:<input name="minute" id="minute" size="2"/> )
+                <button id="add">
+                    Add
+                </button>
+            </div>
         </div>
 
-        <button id="done">
+        <button id="done" style="clear:both; float: right; margin-top: 50px;">
             Proceed to sending invites
         </button>
 
 
-        <div id="chosenones">
+        <div id="chosenones" class="col-xs-12">
+
             <ul id="list"></ul>
         </div>
     </div>
     <div id="send_invites_page" class="page">
         <h2>Basic info</h2>
-        Title : <input type="text" name="title"/><br/>
-        Description:<br/>
-        <textarea name="description"></textarea><br/>
-        Recipients (1 per line):<br/>
-        <textarea name="emails"></textarea><br/>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" class="form-control" placeholder="Enter the title of this event"/>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="6" class="form-control" placeholder="This will be the body of the invitation email"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="recipients">Recipients</label>
+            <textarea type="text" id="recipients" name="recipients" rows="6" class="form-control" placeholder="Enter emails, 1 per line"></textarea>
+        </div>
+
         <button id="send_emails">
             Send invites
         </button>
@@ -98,7 +107,8 @@
     }
     for (var i = 0; i < 60; i += 5) {
         var minute = $("<div id='m" + i + "'></div>");
-        minute.text(i);
+        var min = (i >= 10 ? i : "0" + i);
+        minute.text(min);
         minute.click(function (e) {
             if (!$(this).hasClass("disabled")) {
                 $("#minute").val($(this).text());
@@ -109,11 +119,12 @@
         $("#minutepicker").append(minute);
     }
     $("#datepicker").datepicker({
+        defaultDate: null,
         numberOfMonths: [1, 2],
         altField: "#date",
         altFormat: "yy-mm-dd",
         firstDay: 1
-    });
+    }).datepicker("setDate", null);
     if ($("#hour").val() === "") {
         $("#minutepicker div").addClass("disabled");
     }
@@ -128,9 +139,9 @@
         var event_text = dtm + " " + (hr !== "" ? hr + ":" + min : "");
 
         if (dtm !== "" && $.inArray(event_text, chosen) === -1) {
-            var event = $("<div class='event'></div>");
+            var event = $("<li class='event'></li>");
             event.text(event_text);
-            $("#chosenones").append(event);
+            $("#list").append(event);
             chosen.push(event_text);
         } else {
             console.log(event_text, $.inArray(event_text, chosen));

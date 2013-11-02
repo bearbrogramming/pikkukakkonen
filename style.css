@@ -16,6 +16,8 @@
     background: #CCCCFF;
 }
 
+#newdatetime {  height: 50px}
+
 #steps div {
     font-size: 24px;
     color: #999;
@@ -31,6 +33,8 @@ h1,h2,p {
     color: #111;
 }
 
+
+
 body {
     background: url('brotime.png');
     background-size: cover;
@@ -43,8 +47,7 @@ body {
 }
 
 .container {
-    background: white;
-    opacity: 0.8;
+    background-color:rgba(255,255,255,0.8);
     height: 100%;
     min-height: 1000px;
 }
@@ -53,7 +56,7 @@ body {
 .classofdays { clear: both; border-top: 1px dotted #ccc;}
 .day .dayname { float: left; }
 
-.option {
+div.option {
     float: right;
     width: 36px; height: 36px;
     -webkit-filter: grayscale(100%);
@@ -64,13 +67,21 @@ body {
     -webkit-filter: grayscale(0%);
 }
 
-
-.yes { background: url('/yes.jpg') no-repeat;}
-.yesmaybe { background: url('/yesmaybe.jpg') no-repeat;}
-.nomaybe {background: url('/nomaybe.jpg') no-repeat;}
-.no { background: url('/no.jpg') no-repeat;}
+table td, table th { padding: 16px;}
+thead th.option {
+    width: 36px; height: 36px;
+}
+tbody td { text-align: center;}
+.yes { background: url('/yes.jpg') no-repeat center;}
+.yesmaybe { background: url('/yesmaybe.jpg') no-repeat center;}
+.nomaybe {background: url('/nomaybe.jpg') no-repeat center;}
+.no { background: url('/no.jpg') no-repeat center;}
 
 button {
     clear: both;
-    margin-top: 100px;
+
 }
+
+#confirm_button { margin-top: 100px;}
+
+#chosenones { clear: both;}
