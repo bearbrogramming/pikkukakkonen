@@ -1,1 +1,17 @@
-#datepicker {background: blue}
+
+
+.disabled {color: #d3d3d3}
+#minutepicker div, #hourpicker div {
+    float: left;
+    border: 1px solid darkgray;
+    padding: 5px;
+    margin: 2px;
+    width: 32px;
+    height: 32px;
+}
+#minutepicker div:hover, #hourpicker div:hover {
+    background: #DEDEDE;
+}
+#minutepicker div.selected, #hourpicker div.selected {
+    background: #CCCCFF;
+}

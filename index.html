@@ -6,13 +6,13 @@
     <title>Brooblem? >> Admin</title>
     <script src="/lib/jquery/jquery-1.9.1.js"></script>
     <script src="/lib/jquery/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="/lib/bootstrap/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css">
-
     <link rel="stylesheet" href="/lib/bootstrap/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/lib/jquery/jquery-ui-1.10.3.custom.min.css">
 
-    <script src="/lib/bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
@@ -20,7 +20,7 @@
 <div class="container">
     <h1>Create new event</h1>
 
-    <form>
+
         <h2>Basic info</h2>
         Title : <input type="text" name="title"/><br/>
         Description:<br/>
@@ -29,7 +29,7 @@
         <h2>Select dates (and times)</h2>
 
         <div id="newdatetime">
-            <input name="date" size="12"/>
+            <input name="date" id="date" size="12"/>
             ( <input name="hour" id="hour" size="2"/>:<input name="minute" id="minute" size="2"/> )
             <button id="add">
                 Add
@@ -37,7 +37,8 @@
         </div>
 
         <div id="pickers">
-            <div id="datepicker" class="col-xs-6"></div>
+            <div id="datepicker" class="col-xs-6">
+            </div>
             <div id="hourpicker"  class="col-xs-3"></div>
             <div id="minutepicker" class="col-xs-3"></div>
         </div>
@@ -45,7 +46,7 @@
         <button id="done">
             Proceed to sending invites
         </button>
-    </form>
+
 
     <div id="chosenones">
         <ul id="list"></ul>
@@ -60,6 +61,9 @@
             if ($("#minute").val() === "") {
                 $("#minute").val("00");
             };
+            $("#minutepicker div").removeClass("disabled");
+            $("#hourpicker div").removeClass("selected");
+            $(this).addClass("selected");
         });
         $("#hourpicker").append(hour);
     }
@@ -67,11 +71,42 @@
         var minute = $("<div id='m"+i+"'></div>");
         minute.text(i);
         minute.click(function(e) {
-            $("#minute").val($(this).text());
+            if (!$(this).hasClass("disabled")) {
+                $("#minute").val($(this).text());
+            }
+            $("#minutepicker div").removeClass("selected");
+            $(this).addClass("selected");
         });
         $("#minutepicker").append(minute);
     }
-    $( "#datepicker" ).datepicker({ numberOfMonths: [1, 2] });
+    $( "#datepicker" ).datepicker({
+        numberOfMonths: [1, 2],
+        altField: "#date",
+        altFormat: "yy-mm-dd",
+        firstDay: 1
+    });
+    if ($("#hour").val() === "") {
+        $("#minutepicker div").addClass("disabled");
+    }
+
+    var chosen = [];
+
+    $("#add").click(function(e){
+        var dtm = $("#date").val();
+        var hr = $("#hour").val();
+        var min = $("#minute").val();
+
+        var event_text = dtm + " " + (hr !== "" ? hr + ":" + min : "");
+
+        if (dtm !== "" && $.inArray(event_text, chosen) === -1) {
+            var event = $("<div class='event'></div>");
+            event.text(event_text);
+            $("#chosenones").append(event);
+            chosen.push(event_text);
+        } else {
+            console.log(event_text, $.inArray(event_text, chosen));
+        }
+    });
 </script>
 </body>
 </html>
