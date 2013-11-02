@@ -52,7 +52,7 @@ body {
     min-height: 1000px;
 }
 
-.day { clear: both;  width: 300px; }
+.day { clear: both;  width: 300px; padding-left: 2em;}
 .classofdays { clear: both; border-top: 1px dotted #ccc;}
 .day .dayname { float: left; }
 
