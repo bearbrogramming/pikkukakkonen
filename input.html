@@ -21,48 +21,18 @@
     <div id="logo">
         Bro-Time<sup>TM</sup>
     </div>
-    <h2 id="autofill_text">Autofill</h2>
-    <div id="autofill">
-        <div id="weekdays">
-            weekdays:
-            <div id="weekday_options" class="options weekdays"></div>
-            <div class="weekday">
-                monday
-                <div class="options monday"></div>
-            </div>
-            <div class="weekday">
-                tuesday
-                <div class="options tuesday"></div>
-            </div>
-            <div class="weekday">
-                wednesday
-                <div class="options wednesday"></div>
-            </div>
-            <div class="weekday">
-                thursday
-                <div class="options thursday"></div>
-            </div>
-            <div class="weekday">
-                friday
-                <div class="options friday"></div>
-            </div>
-        </div>
-        <div id="weekend">
-            weekend:
-            <div id="weekend_options" class="options weekend"></div>
-            <div class="weekday">
-                saturday
-                <div class="options saturday"></div>
-            </div>
-            <div class="weekday">
-                sunday
-                <div class="options sunday"></div>
-            </div>
-        </div>
+    <div class="col-xs-9">
+        <h2>Please choose your dates</h2>
+        <div id="event_times"></div>
+    </div>
+    <div class="col-xs-3">
+        <h2 id="autofill_text">Autofill</h2>
+        <div id="autofill"></div>
     </div>
 </div>
 <script>
-    $("#autofill").hide();
+
+   // $("#autofill").hide();
     $("#autofill_text").click(function() {
         $("#autofill").toggle();
     });
@@ -74,6 +44,90 @@
         var no = $("<div class='no option'>no</div>");
 
     });
+    var autofills = {
+        weekdays: ['monday','tuesday','wednesday','thursday','friday'],
+        weekends: ['saturday','sunday']
+    }
+    var choices = ['yes', 'yesmaybe','nomaybe','no'].reverse();
+
+
+    for (var key in autofills) {
+        var box = $("<div/>", { id: key,class: 'classofdays' });
+        var boxname = $("<div>" + key +"</div>");
+        box.append(boxname);
+        for (var day in autofills[key]) {
+            var dayname = autofills[key][day];
+            var dbox = $("<div />", { class: 'day'});
+            var dname = $("<div class='dayname'>" + dayname +"</div>");
+            var opts = $("<div />", { class: 'options '+dayname });
+            for (var choice in choices) {
+                var opt = $("<div />", { class: 'option' });
+//                opt.text(choices[choice]);
+                opt.attr('data-day', dayname);
+                opt.attr('data-choice', choices[choice]);
+                opt.addClass(choices[choice]);
+                opts.append(opt);
+            }
+
+            dbox.append(dname);
+            dbox.append(opts);
+            box.append(dbox);
+        }
+
+        $("#autofill").append(box);
+    }
+
+    var dates = {
+        '2013-11-02': [],
+        '2013-12-24': ['13:00','15:55']
+    }
+   for (var dtm in dates) {
+       var box = $("<div/>", { id: key,class: 'classofdays' });
+       var dow = getDow(dtm);
+       var boxname = $("<div>" + dow + " " + dtm +"</div>");
+       box.append(boxname);
+       if (dates[dtm].length == 0) {
+           dates[dtm].push(' ');
+       }
+       for (var time in dates[dtm]) {
+           var dayname = dates[dtm][time];
+           var dbox = $("<div />", { class: 'day'});
+
+           var dname = $("<div class='dayname'> " + dayname +"</div>");
+           var opts = $("<div />", { class: 'options ' });
+           for (var choice in choices) {
+               var opt = $("<div />", { class: 'option' });
+//                opt.text(choices[choice]);
+               opt.addClass(dow);
+               opt.addClass(choices[choice]);
+               opts.append(opt);
+           }
+
+           dbox.append(dname);
+           dbox.append(opts);
+           box.append(dbox);
+       }
+
+       $("#event_times").append(box);
+   }
+
+    function getDow(dtm) {
+        return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"][new Date(Date.parse(dtm)).getDay()];
+    }
+
+    $(".no").addClass("selected");
+
+    $("#autofill .option").click(function() {
+        console.log("fubar")
+        var that = $(this);
+        var choice = that.attr("data-choice");
+        var day = that.attr("data-day");
+        that.parent().find("div").removeClass("selected");
+        that.addClass("selected");
+        $("#event_times .option." + day).removeClass("selected");
+        $("#event_times .option." + choice + "." + day).addClass("selected");
+    });
+
 </script>
 </body>
 </html>

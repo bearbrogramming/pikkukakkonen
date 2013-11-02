@@ -48,3 +48,24 @@ body {
     height: 100%;
     min-height: 1000px;
 }
+
+.day { clear: both;  width: 300px; }
+.classofdays { clear: both; border-top: 1px dotted #ccc;}
+.day .dayname { float: left; }
+
+.option {
+    float: right;
+    width: 36px; height: 36px;
+    -webkit-filter: grayscale(100%);
+
+}
+
+.option.selected, .option:hover {
+    -webkit-filter: grayscale(0%);
+}
+
+
+.yes { background: url('/yes.jpg') no-repeat;}
+.yesmaybe { background: url('/yesmaybe.jpg') no-repeat;}
+.nomaybe {background: url('/nomaybe.jpg') no-repeat;}
+.no { background: url('/no.jpg') no-repeat;}
