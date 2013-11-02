@@ -1,9 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Pair programming competition winners</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Brooblem? >> Admin</title>
+    <script src="/lib/jquery/jquery-1.9.1.js"></script>
+    <script src="/lib/jquery/jquery-ui-1.10.3.custom.min.js"></script>
+
+    <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/lib/bootstrap/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="/lib/bootstrap/bootstrap.min.js"></script>
+
 </head>
 <body>
 
+<div class="container">
+    <h1>Create new event</h1>
+
+    <form>
+        <h2>Basic info</h2>
+        Title : <input type="text" name="title"/><br/>
+        Description:<br/>
+        <textarea name="description"></textarea><br>
+
+        <h2>Select dates (and times)</h2>
+
+        <div id="newdatetime">
+            <input name="date" size="12"/>
+            ( <input name="hour" id="hour" size="2"/>:<input name="minute" id="minute" size="2"/> )
+            <button id="add">
+                Add
+            </button>
+        </div>
+
+        <div id="pickers">
+            <div id="datepicker" class="col-xs-6"></div>
+            <div id="hourpicker"  class="col-xs-3"></div>
+            <div id="minutepicker" class="col-xs-3"></div>
+        </div>
+
+        <button id="done">
+            Proceed to sending invites
+        </button>
+    </form>
+
+    <div id="chosenones">
+        <ul id="list"></ul>
+    </div>
+</div>
+<script>
+    for (var i = 0; i < 24; i++) {
+        var hour = $("<div id='h"+i+"'></div>");
+        hour.text(i);
+        hour.click(function(e) {
+            $("#hour").val($(this).text());
+            if ($("#minute").val() === "") {
+                $("#minute").val("00");
+            };
+        });
+        $("#hourpicker").append(hour);
+    }
+    for (var i = 0; i < 60; i+=5) {
+        var minute = $("<div id='m"+i+"'></div>");
+        minute.text(i);
+        minute.click(function(e) {
+            $("#minute").val($(this).text());
+        });
+        $("#minutepicker").append(minute);
+    }
+    $( "#datepicker" ).datepicker({ numberOfMonths: [1, 2] });
+</script>
 </body>
 </html>
